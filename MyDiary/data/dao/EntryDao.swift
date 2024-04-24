@@ -12,8 +12,14 @@ final class EntryDao {
     private let dbQueue: DatabaseQueue
     
     init() {
-        let databaseURL = try! FileManager.default
-                    .url(for: .applicationDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+//        let databaseURL = try! FileManager.default
+//                    .url(for: .applicationDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let databaseURL = try! FileManager.default.url(
+            for: .cachesDirectory,
+            in: .userDomainMask,
+            appropriateFor: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first,
+            create: true
+        )
                     .appendingPathComponent("MyDiary.sqlite")
         dbQueue = try! DatabaseQueue(path: databaseURL.path())
         createTableIfNotExists()

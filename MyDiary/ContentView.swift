@@ -170,21 +170,26 @@ struct ContentView: View {
     }
     
     func showDatePickerAlert(type: Int) {
-            let alertVC = UIAlertController(title: "\n\n", message: nil, preferredStyle: .actionSheet)
-            let datePicker: UIDatePicker = UIDatePicker()
-            alertVC.view.addSubview(datePicker)
-
-            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-                addEntry(type: type, date: datePicker.date)
-            }
-            alertVC.addAction(okAction)
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-            alertVC.addAction(cancelAction)
-
-            if let viewController = currentKeyWindow?.rootViewController {
-                viewController.present(alertVC, animated: true, completion: nil)
-            }
+        let alertVC = UIAlertController(title: "\n\n", message: nil, preferredStyle: .actionSheet)
+        let datePicker: UIDatePicker = UIDatePicker()
+        alertVC.view.addSubview(datePicker)
+    
+        let popController = alertVC.popoverPresentationController
+        
+        popController?.sourceView = datePicker
+        popController?.sourceRect = .init(x: 0, y: 100, width: alertVC.view.bounds.size.width, height: alertVC.view.bounds.size.height)
+    
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            addEntry(type: type, date: datePicker.date)
         }
+        alertVC.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alertVC.addAction(cancelAction)
+
+        if let viewController = currentKeyWindow?.rootViewController {
+            viewController.present(alertVC, animated: true, completion: nil)
+        }
+    }
     
     func showDeleteConfirmationDialog(entry: Entry) {
         self.needShowDeleteConfirmationDialog = true
